@@ -1,5 +1,5 @@
-# om2m-cep
-Complex Event Processing library for om2m - open source IOT platform
+# CEP library for OM2M
+CEP (Complex evenet processing) library for open source IOT (Internet of things) platform OM2M (Open source platform for M2M communication)
 
 Implementation instructions:
 
@@ -18,7 +18,22 @@ Implementation instructions:
 
 You successfuly added om2m-cep library to your project. Enjoj!
 
+##Function list
+```
+public CepHttpServlet(CseService cse, Class eventClass)
+public void run()
+public void stopThread()
+public void sendEvent(DataInterface data, String deviceName)
+public void insertDevice(String deviceName)
+public void addCepRule(String deviceName, String dataName, String rule)
+public void editCepRule(String deviceName, String dataName, String newRule)
+public void deleteCepRule(String deviceName, String dataName)
+public ArrayList<CepRule> getAllCepRules()
+public ArrayList<Device> getAllCepDevices()
+public boolean isRunning()
+```
 
+##Using examples
 
 - In usage_example_gui.pdf are step by step instructions how to use om2m-cep library in your project using GUI for adding rules.
 - In usage_example_programatical_solution.pdf are step by step instructions how to use om2m-cep library programaticaly within your plugin.
