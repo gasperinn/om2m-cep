@@ -18,5 +18,8 @@ Implementation instructions:
 
 You successfuly added om2m-cep library to your project. Enjoj!
 
+
+
 - In usage_example_gui.pdf are step by step instructions how to use om2m-cep library in your project using GUI for adding rules.
+- In usage_example_programatical_solution.pdf are step by step instructions how to use om2m-cep library programaticaly within your plugin.
 
