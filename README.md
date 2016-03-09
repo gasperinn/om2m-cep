@@ -18,5 +18,5 @@ Implementation instructions:
 
 You successfuly added om2m-cep library to your project. Enjoj!
 
-- In usage example_gui.txt are step by step instructions how to use om2m-cep library in your project using GUI for adding rules.
+- In usage_example_gui.txt are step by step instructions how to use om2m-cep library in your project using GUI for adding rules.
 
