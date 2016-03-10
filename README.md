@@ -1,6 +1,8 @@
 # CEP library for OM2M
 CEP (Complex evenet processing) library for open source IOT (Internet of things) platform OM2M (Open source platform for M2M communication)
 
+Library (om2m-cep.jar) is available in folder [library](library).
+
 ##Implementation instructions
 
 - Clone OM2M project into Eclipse Kepler as described on https://wiki.eclipse.org/OM2M/one/Clone
