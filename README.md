@@ -40,3 +40,9 @@ public boolean isRunning()
 - In [usage_example_gui.pdf](usage_example_gui.pdf) are step by step instructions how to use om2m-cep library in your project using GUI for adding rules.
 - In [usage_example_programatical_solution.pdf](usage_example_programatical_solution.pdf) are step by step instructions how to use om2m-cep library programaticaly within your plugin.
 
+##References
+
+CEP library for OM2M uses:
+- [Espertech](http://www.espertech.com/) library for creating and managing CEP. **Syntax for writing CEP rules in this library is the same as in Espertech library.**
+- [H2 Database engine](http://www.h2database.com/html/main.html) library for saving CEP rules and devices into database.
+- [Jetty](https://eclipse.org/jetty/) for web server implementation (web GUI for managing CEP rules).
