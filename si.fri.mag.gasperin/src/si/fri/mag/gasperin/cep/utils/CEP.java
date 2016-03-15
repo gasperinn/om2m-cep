@@ -5,6 +5,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
 
+import si.fri.mag.gasperin.cep.CepHttpServlet;
 import si.fri.mag.gasperin.cep.h2.CepRule;
 
 import com.espertech.esper.client.Configuration;
@@ -52,10 +53,18 @@ public class CEP {
 	}
 	
 	public void sendEvent(DataInterface data, String deviceName){
+		
 			EPServiceProvider provider = EPServiceProviderManager.getExistingProvider(deviceName);
 			if(provider != null){
 				EPRuntime cepRT = provider.getEPRuntime();
 				cepRT.sendEvent(data);
+				if(CepHttpServlet.isDebug()){
+					System.out.println("[CEP DEBUG]: Data sent succesfully!");
+				}
+			}else{
+				if(CepHttpServlet.isDebug()){
+					System.out.println("[CEP DEBUG]: EPServiceProvider is null!");
+				}
 			}
 	}
 	

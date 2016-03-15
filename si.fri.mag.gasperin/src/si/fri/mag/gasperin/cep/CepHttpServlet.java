@@ -42,6 +42,7 @@ public class CepHttpServlet extends Thread{
 	
 	private static Server server;
 	private CEP cep;
+	private static boolean debug = false;
 	
 	//use same credentials as for webpage
 	private String userName = null;
@@ -69,6 +70,7 @@ public class CepHttpServlet extends Thread{
 					String userPass = line.substring("org.eclipse.om2m.adminRequestingEntity=".length());
 					userName = userPass.split("\\\\:")[0];
 					pass = userPass.split("\\\\:")[1];
+					System.out.println("[CEP INFO]: Username and password for CEP http server has been set");
 					//LOGGER.info("Username and password for CEP http server has been set");
 				}
 		      }
@@ -233,6 +235,16 @@ public class CepHttpServlet extends Thread{
 	}
 	
 	public void addCepRule(String deviceName, String dataName, String rule){
+				
+		//Add cep to database
+		H2DBTableCepRules table = new H2DBTableCepRules();
+    	table.insert(deviceName, dataName, rule);
+    	
+    	//Add cep rule to CEP
+    	CepRule cr = table.get(deviceName, dataName);
+    	cep.addRule(cr);
+    	
+    	table.close();
 		
 		//SENSOR RESOURCES (CEP DATA)
     	String targetId = "/" + Constants.CSE_ID + "/" + Constants.CSE_NAME + "/" + deviceName;
@@ -242,17 +254,8 @@ public class CepHttpServlet extends Thread{
     	// Create the CEP_DATA container
 		ResponsePrimitive resp = RequestSender.createContainer(targetId, dataName, cnt);
 		
-		if(resp.getResponseStatusCode().equals(ResponseStatusCode.CREATED)){
-			//Add cep to database
-			H2DBTableCepRules table = new H2DBTableCepRules();
-        	table.insert(deviceName, dataName, rule);
-        	
-        	//Add cep rule to CEP
-        	CepRule cr = table.get(deviceName, dataName);
-        	cep.addRule(cr);
-        	
-        	table.close();
-		}
+        System.out.println("[CEP INFO]: Rule: '" + rule + "' has been added to device: '"+deviceName+"' with data: '"+dataName+"'.");
+		
 	}
 	
 	public void editCepRule(String deviceName, String dataName, String newRule){
@@ -263,6 +266,8 @@ public class CepHttpServlet extends Thread{
 		//Edit rule in database
 		table.updateRule(new CepRule(cepRule.id, deviceName, dataName, newRule));
 		table.close();
+		
+		System.out.println("[CEP INFO]: Rule: '" + newRule + "' has been modified in device: '"+deviceName+"' with data: '"+dataName+"'.");
 	}
 	
 	public void deleteCepRule(String deviceName, String dataName){
@@ -282,6 +287,8 @@ public class CepHttpServlet extends Thread{
 			table.remove(cepRule.id);
 		}
 		table.close();
+		
+		System.out.println("[CEP INFO]: Rule with device name: '" + deviceName + "' and data name: '" + dataName + "' has been deleted.");
 	}
 	
 	public ArrayList<CepRule> getAllCepRules(){
@@ -303,4 +310,13 @@ public class CepHttpServlet extends Thread{
 	public boolean isRunning(){
 		return server.isRunning();
 	}
+	
+	public static void setDebug(boolean mode){
+		debug = mode;
+	}
+	
+	public static boolean isDebug(){
+		return debug;
+	}
+	
 }
