@@ -1,48 +1,48 @@
-# om2m-cep
-Complex Event Processing library for om2m - open source IOT platform
+# CEP library for OM2M
+CEP (Complex evenet processing) library for open source IOT (Internet of things) platform OM2M (Open source platform for M2M communication)
 
-Implementation instructions:
+Library (om2m-cep.jar) is available in folder [library](library).
 
-Clone OM2M project into Eclipse Kepler as described on https://wiki.eclipse.org/OM2M/one/Clone
-Create custom plugin as described on https://wiki.eclipse.org/OM2M/one/Developer (at the stage "Add the plugin to the OM2M product(s)" add plugin to in-cse)
+##Implementation instructions
 
-Open Eclipse Kepler
-Copy om2m-cep/library/om2m-cep.jar to your projects lib folder (e.g. org.eclipse.om2m.sample.ipe/lib)
-Select your plugin project and press F5
-Go to Project -> Properties -> Java build path -> Libraries -> Add JARS... 
-Open your plugins lib folder (e.g. org.eclipse.om2m.sample.ipe -> lib) and select om2m-cep.jar file
-Click OK to close libraries window
-Open your projects MANIFEST.MF file -> Runtime -> Classpath -> Add...
-Select lib -> om2m-cep.jar and press OK
-Press CTRL + S to save MANIFEST.MF file
+- Clone OM2M project into Eclipse Kepler as described on https://wiki.eclipse.org/OM2M/one/Clone
+- Create custom plugin as described on https://wiki.eclipse.org/OM2M/one/Developer (at the stage "Add the plugin to the OM2M product(s)" add plugin to in-cse)
 
-Create new class named Data.java
-In this class you have to declare which data will Cep server process. Modify it for your needs.
-In our demo we will process only double values from the sensor.
+- Open Eclipse Kepler
+- Copy om2m-cep/library/om2m-cep.jar to your projects lib folder (e.g. org.eclipse.om2m.sample.ipe/lib)
+- Select your plugin project and press F5
+- Go to Project -> Properties -> Java build path -> Libraries -> Add JARS... 
+- Open your plugins lib folder (e.g. org.eclipse.om2m.sample.ipe -> lib) and select om2m-cep.jar file
+- Click OK to close libraries window
+- Open your projects MANIFEST.MF file -> Runtime -> Classpath -> Add...
+- Select lib -> om2m-cep.jar and press OK
+- Press CTRL + S to save MANIFEST.MF file
 
-Open Monitor.java file and add "static CepHttpServlet cepServer;"
-Add "cepServer = new CepHttpServlet(cseService, Data.class);"
-Add "cepServer.run();"
-Add "cepServer.stopThread();"
-Add "cepServer.insertDevice(sensorId);"
-Add "Data data= new Data(sensorValue);	cepServer.sendEvent(data, sensorId);"
+You successfuly added om2m-cep library to your project. Enjoj!
 
-Right click on org.eclipse.om2m project -> Run as -> Maven install
+##Function list
+```
+public CepHttpServlet(CseService cse, Class eventClass)
+public void run()
+public void stopThread()
+public void sendEvent(DataInterface data, String deviceName)
+public void insertDevice(String deviceName)
+public void addCepRule(String deviceName, String dataName, String rule)
+public void editCepRule(String deviceName, String dataName, String newRule)
+public void deleteCepRule(String deviceName, String dataName)
+public ArrayList<CepRule> getAllCepRules()
+public ArrayList<Device> getAllCepDevices()
+public boolean isRunning()
+```
 
-Open explorer and go to org.eclipse.om2m\org.eclipse.om2m.site.in-cse\target\products\in-cse\win32\win32\x86_64
-Double click on start.bat
-Type "ss" into comand line and look for id of your recently created plugin (e.g. org.eclipse.om2m.sample.ipe)
-Type "start id" (e.g. "start 32")
+##Using examples
 
-Open web browse and type into url "http://localhost:8080/webpage"
-Default values for login are "admin" : "admin"
-Here you can monitor your data catched into cep rules
+- In [usage_example_gui.pdf](usage_example_gui.pdf) are step by step instructions how to use om2m-cep library in your project using GUI for adding rules.
+- In [usage_example_programatical_solution.pdf](usage_example_programatical_solution.pdf) are step by step instructions how to use om2m-cep library programaticaly within your plugin.
 
-Open new tab and type into url "http://localhost:8081/cep" 
-Default values for login are also "admin" : "admin"
-Here you can add/delete/update cep rules for specific device
+##References
 
-For example add new cep rule:
-
-
-
+CEP library for OM2M uses:
+- [Espertech](http://www.espertech.com/) library for creating and managing CEP. **Syntax for writing CEP rules in this library is the same as in Espertech library.**
+- [H2 Database engine](http://www.h2database.com/html/main.html) library for saving CEP rules and devices into database.
+- [Jetty](https://eclipse.org/jetty/) for web server implementation (web GUI for managing CEP rules).
