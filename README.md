@@ -33,6 +33,8 @@ public void deleteCepRule(String deviceName, String dataName)
 public ArrayList<CepRule> getAllCepRules()
 public ArrayList<Device> getAllCepDevices()
 public boolean isRunning()
+public static void setDebug(boolean mode)
+public static boolean isDebug()
 ```
 
 ##Using examples
