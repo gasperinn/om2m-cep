@@ -29,6 +29,8 @@ import org.eclipse.om2m.core.service.CseService;
 import org.eclipse.om2m.commons.resource.Container;
 import org.eclipse.om2m.commons.resource.ResponsePrimitive;
 
+import com.espertech.esper.client.EPException;
+
 import si.fri.mag.gasperin.cep.h2.CepRule;
 import si.fri.mag.gasperin.cep.h2.Device;
 import si.fri.mag.gasperin.cep.h2.H2DBTableCepRules;
@@ -234,7 +236,7 @@ public class CepHttpServlet extends Thread{
 		devices.close();
 	}
 	
-	public void addCepRule(String deviceName, String dataName, String rule){
+	public void addCepRule(String deviceName, String dataName, String rule){ 
 				
 		//Add cep to database
 		H2DBTableCepRules table = new H2DBTableCepRules();
@@ -242,7 +244,12 @@ public class CepHttpServlet extends Thread{
     	
     	//Add cep rule to CEP
     	CepRule cr = table.get(deviceName, dataName);
-    	cep.addRule(cr);
+    	try{
+	    	cep.addRule(cr);
+    	}catch (EPException e){
+    		table.remove(cr.id);
+    		throw e;
+    	}
     	
     	table.close();
 		
@@ -262,7 +269,7 @@ public class CepHttpServlet extends Thread{
 		H2DBTableCepRules table = new H2DBTableCepRules();
 		CepRule cepRule = table.get(deviceName, dataName);
 		//Edit rule in CEP
-		cep.editRule(new CepRule(cepRule.id, deviceName, dataName, newRule));
+		cep.editRule(new CepRule(cepRule.id, deviceName, dataName, newRule), cepRule);
 		//Edit rule in database
 		table.updateRule(new CepRule(cepRule.id, deviceName, dataName, newRule));
 		table.close();
