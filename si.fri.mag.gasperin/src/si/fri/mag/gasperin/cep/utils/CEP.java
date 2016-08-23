@@ -10,6 +10,7 @@ import si.fri.mag.gasperin.cep.h2.CepRule;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPAdministrator;
+import com.espertech.esper.client.EPException;
 import com.espertech.esper.client.EPRuntime;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
@@ -77,17 +78,27 @@ public class CEP {
 	    cepStatement.destroy();
 	}
 	
-	public void editRule(CepRule cepRule){
+	public void editRule(CepRule newCepRule, CepRule oldCepRule){
 		
-		EPServiceProvider provider = EPServiceProviderManager.getExistingProvider(cepRule.deviceName);
+		EPServiceProvider provider = EPServiceProviderManager.getExistingProvider(oldCepRule.deviceName);
 	    EPAdministrator cepAdm = provider.getEPAdministrator();
 	  
-	    EPStatement cepStatement = cepAdm.getStatement(cepRule.id+"");
+	    EPStatement cepStatement = cepAdm.getStatement(oldCepRule.id+"");
 	    cepStatement.destroy();
 	    
-	    CEPListener listener = new CEPListener(cepRule);
-	    cepStatement = cepAdm.createEPL(cepRule.rule, cepRule.id+"");
-	    cepStatement.addListener(listener);
+	    try{
+	    	//TRY TO CREATE NEW ONE
+		    cepStatement = cepAdm.createEPL(newCepRule.rule, newCepRule.id+"");
+		    CEPListener listener = new CEPListener(newCepRule);
+		    cepStatement.addListener(listener);
+	    
+	    }catch (EPException e){
+	    	//CREATING NEW ONE FAILED, CREATE OLD ONE
+	    	cepStatement = cepAdm.createEPL(oldCepRule.rule, oldCepRule.id+"");
+		    CEPListener listener = new CEPListener(oldCepRule);
+		    cepStatement.addListener(listener);
+		    throw e;
+	    }
 	    
 	}
 		
